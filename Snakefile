@@ -133,7 +133,7 @@ rule Genrich:
         Genrich -t {output.no_mt_sort_bam} -o {output.atac_narrowpeak} -b {output.atac_bed} -m 30 -q 0.05 -r -j
         reads_total=$(samtools view -c {output.no_mt_sort_bam})
         reads_inregion=$(samtools view -c -L {output.atac_narrowpeak} {output.no_mt_sort_bam})
-        echo $(($reads_inregion/$reads_total)) > {output.frip_stats}
+        printf "{wildcards.sample} frip: %.2f\n" `echo "scale=2;$reads_inregion/$reads_total"|bc` > {output.frip_stats}
     """
 
 

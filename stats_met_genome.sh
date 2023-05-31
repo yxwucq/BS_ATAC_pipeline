@@ -8,12 +8,12 @@ ref_bed=$3
 
 # This code is used to extract the statistics of clean data from json file
 # variables: raw_bases, raw_reads, trimmed_bases, trimmed_reads, Q20_bases, Q30_bases
-raw_bases=`grep "total_bases" 01.clean_data/${sample}_clean.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
-raw_reads=`grep "total_reads" 01.clean_data/${sample}_clean.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
-trimmed_bases=`grep "total_bases" 01.clean_data/${sample}_clean.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n2 | tail -n1`
-trimmed_reads=`grep "total_reads" 01.clean_data/${sample}_clean.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n2 | tail -n1`
-Q20_bases=`grep "q20_bases" 01.clean_data/${sample}_clean.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
-Q30_bases=`grep "q30_bases" 01.clean_data/${sample}_clean.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
+raw_bases=`grep "total_bases" 01.clean_data/${sample}_fastp.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
+raw_reads=`grep "total_reads" 01.clean_data/${sample}_fastp.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
+trimmed_bases=`grep "total_bases" 01.clean_data/${sample}_fastp.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n2 | tail -n1`
+trimmed_reads=`grep "total_reads" 01.clean_data/${sample}_fastp.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n2 | tail -n1`
+Q20_bases=`grep "q20_bases" 01.clean_data/${sample}_fastp.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
+Q30_bases=`grep "q30_bases" 01.clean_data/${sample}_fastp.json | awk 'BEGIN{FS=":|: |,"}{print $2}' | head -n1`
 
 # Get the number of reads that mapped to the genome
 mapped_reads_includes=`samtools flagstat 02.bismark_map/${sample}_clean_1_bismark_bt2_pe.bam | grep "mapped" | awk 'BEGIN{FS=" "}{print $1}' | head -n1`

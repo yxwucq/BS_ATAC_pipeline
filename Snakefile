@@ -28,8 +28,8 @@ rule TrimData:
     output:
         clean_R1=temp("01.clean_data/{sample}_clean_1.fq.gz"),
         clean_R2=temp("01.clean_data/{sample}_clean_2.fq.gz"),
-        report_json="01.clean_data/{sample}_clean.json",
-        report_html="01.clean_data/{sample}_clean.html"
+        report_json="01.clean_data/{sample}_fastp.json",
+        report_html="01.clean_data/{sample}_fastp.html"
     threads: 4
     conda:
         "ngspipe"
@@ -37,6 +37,18 @@ rule TrimData:
         fastp -D -i {input.R1} -I {input.R2} -o {output.clean_R1} -O {output.clean_R2} \
         -j {output.report_json} -h {output.report_html} 
         echo -e "["$(date)"]\\t{wildcards.sample} QC done!"
+    """
+
+rule Multiqc_fastp:
+    input:
+        report_json=expand("01.clean_data/{sample}_fastp.json", sample=name_list),
+        report_html=expand("01.clean_data/{sample}_fastp.html", sample=name_list)
+    output:
+        multiqc_report="01.clean_data/multiqc_fastp.html"
+    threads: 1
+    conda: "tgspipe"
+    shell: """
+        multiqc -f -o 01.clean_data -n multiqc_fastp 01.clean_data
     """
 
 ## step2 - bismark map
@@ -85,8 +97,8 @@ rule ExtractMethyl:
 ## step4 - stats info
 rule Stats:
     input:
-        report_json="01.clean_data/{sample}_clean.json",
-        report_html="01.clean_data/{sample}_clean.html",
+        report_json="01.clean_data/{sample}_fastp.json",
+        report_html="01.clean_data/{sample}_fastp.html",
         bis_mapped_bam="02.bismark_map/{sample}_clean_1_bismark_bt2_pe.bam",
         bis_rmdup_bam="02.bismark_map/{sample}.deduplicated.bam",
         bis_rmdup_report="02.bismark_map/{sample}.deduplication_report.txt",
